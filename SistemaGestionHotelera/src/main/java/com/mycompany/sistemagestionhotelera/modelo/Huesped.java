@@ -1,23 +1,20 @@
 package com.mycompany.sistemagestionhotelera.modelo;
 
-public class Huesped {
+public abstract class Huesped {
     private int idHuesped;
     private String nombreCompleto;
     private String documentoIdentidad;
     private String telefono;
     private String email;
-    private String tipoCliente;
 
-    public Huesped() {}
-
-    public Huesped(String nombreCompleto, String documentoIdentidad, String telefono, String email, String tipoCliente) {
+    public Huesped(String nombreCompleto, String documentoIdentidad, String telefono, String email) {
         this.nombreCompleto = nombreCompleto;
         this.documentoIdentidad = documentoIdentidad;
         this.telefono = telefono;
         this.email = email;
-        this.tipoCliente = tipoCliente;
     }
 
+    // Getters y Setters Estándar
     public int getIdHuesped() { return idHuesped; }
     public void setIdHuesped(int idHuesped) { this.idHuesped = idHuesped; }
     public String getNombreCompleto() { return nombreCompleto; }
@@ -28,6 +25,8 @@ public class Huesped {
     public void setTelefono(String telefono) { this.telefono = telefono; }
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
-    public String getTipoCliente() { return tipoCliente; }
-    public void setTipoCliente(String tipoCliente) { this.tipoCliente = tipoCliente; }
+
+    // --- MÉTODOS ABSTRACTOS PARA JUSTIFICAR EL PATRÓN GOF ---
+    public abstract String obtenerBeneficio();
+    public abstract String getTipoCliente();
 }

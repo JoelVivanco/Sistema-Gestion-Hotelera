@@ -81,14 +81,14 @@ public class FrmHuesped extends javax.swing.JFrame {
         ));
 
         // Configuración de la tabla nativa
-        String[] columnas = {"ID (Auto)", "Nombre Completo", "Documento", "Teléfono", "Correo", "Tipo Cliente"};
+        String[] columnas = {"ID", "Nombre Completo", "Documento", "Teléfono", "Correo", "Tipo Cliente"};
         modeloTabla = new DefaultTableModel(columnas, 0) {
             @Override
-            public boolean isCellEditable(int row, int column) { return false; } // Celdas no editables directamente
+            public boolean isCellEditable(int row, int column) { return false; } 
         };
         
         tblHuespedes = new JTable(modeloTabla);
-        tblHuespedes.getTableHeader().setReorderingAllowed(false); // No mover columnas
+        tblHuespedes.getTableHeader().setReorderingAllowed(false); 
         JScrollPane scrollTabla = new JScrollPane(tblHuespedes);
         panelTabla.add(scrollTabla, BorderLayout.CENTER);
 
@@ -100,7 +100,7 @@ public class FrmHuesped extends javax.swing.JFrame {
         
         btnRegistrar = new JButton("Guardar Registro");
         btnRegistrar.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        btnRegistrar.setBackground(new Color(34, 139, 34)); // Verde ejecutivo sutil
+        btnRegistrar.setBackground(new Color(34, 139, 34)); 
         btnRegistrar.setForeground(Color.BLACK);
 
         panelBotones.add(btnLimpiar);
@@ -130,6 +130,18 @@ public class FrmHuesped extends javax.swing.JFrame {
                 limpiarCampos();
             }
         });
+
+        // Carga automatica inicial de la BD
+        cargarDatosTabla();
+    }
+
+    private void cargarDatosTabla() {
+        modeloTabla.setRowCount(0); 
+        HuespedControlador controlador = new HuespedControlador();
+        java.util.List<Object[]> filas = controlador.obtenerListaHuespedes();
+        for (Object[] fila : filas) {
+            modeloTabla.addRow(fila);
+        }
     }
 
     private void ejecutarRegistro() {
@@ -145,9 +157,8 @@ public class FrmHuesped extends javax.swing.JFrame {
         if (exito) {
             JOptionPane.showMessageDialog(this, "Registro almacenado con éxito en la base de datos.", "Operación Exitosa", JOptionPane.INFORMATION_MESSAGE);
             
-            // Agregar visualmente el registro a la tabla en tiempo real sin recargar
-            modeloTabla.addRow(new Object[]{"S/N", nombre, documento, telefono, email, tipo});
-            
+            // Actualiza la tabla jalando el nuevo estado de la BD
+            cargarDatosTabla();
             limpiarCampos();
         } else {
             JOptionPane.showMessageDialog(this, "No se pudo completar el registro.\nAsegúrese de llenar los campos obligatorios y que el documento no exista.", "Error de Consistencia", JOptionPane.ERROR_MESSAGE);
@@ -165,7 +176,6 @@ public class FrmHuesped extends javax.swing.JFrame {
 
     public static void main(String args[]) {
         try {
-            // Activa el Look and Feel nativo del sistema operativo (Windows/Mac) para eliminar apariencias toscas
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception ex) {
             java.util.logging.Logger.getLogger(FrmHuesped.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);

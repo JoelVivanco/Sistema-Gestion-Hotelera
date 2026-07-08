@@ -12,7 +12,7 @@ public class FrmReserva extends javax.swing.JFrame {
 
     // Componentes del Formulario
     private JTextField txtIdHuesped;
-    private JTextField txtIdHabitacion;
+    private JComboBox<Integer> cboHabitacion;
     private JTextField txtFechaIngreso;
     private JTextField txtFechaSalida;
     private JTextField txtCostoTotal;
@@ -47,8 +47,9 @@ public class FrmReserva extends javax.swing.JFrame {
         JLabel lblHuesped = new JLabel("ID Huésped (Numérico):"); lblHuesped.setFont(fuenteLabel);
         txtIdHuesped = new JTextField();
 
-        JLabel lblHabitacion = new JLabel("ID Habitación (Numérico):"); lblHabitacion.setFont(fuenteLabel);
-        txtIdHabitacion = new JTextField();
+        JLabel lblHabitacion = new JLabel("Habitaciones Disponibles:"); lblHabitacion.setFont(fuenteLabel);
+        cboHabitacion = new JComboBox<>(); // MODIFICADO: Inicialización del combo
+        cboHabitacion.setBackground(Color.WHITE);
 
         JLabel lblIngreso = new JLabel("Fecha Ingreso (AAAA-MM-DD):"); lblIngreso.setFont(fuenteLabel);
         txtFechaIngreso = new JTextField();
@@ -66,7 +67,7 @@ public class FrmReserva extends javax.swing.JFrame {
 
         // Colocar componentes en el Grid
         panelFormulario.add(lblHuesped);    panelFormulario.add(txtIdHuesped);
-        panelFormulario.add(lblHabitacion); panelFormulario.add(txtIdHabitacion);
+        panelFormulario.add(lblHabitacion); panelFormulario.add(cboHabitacion);
         panelFormulario.add(lblIngreso);    panelFormulario.add(txtFechaIngreso);
         panelFormulario.add(lblSalida);     panelFormulario.add(txtFechaSalida);
         panelFormulario.add(lblCosto);      panelFormulario.add(txtCostoTotal);
@@ -76,7 +77,7 @@ public class FrmReserva extends javax.swing.JFrame {
         JPanel panelTabla = new JPanel(new BorderLayout());
         panelTabla.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createEtchedBorder(), 
-                " Auditoría de Reservas Procesadas en esta Sesión ", 
+                " Auditoría de Reservas Procesadas ", 
                 TitledBorder.LEFT, 
                 TitledBorder.TOP, 
                 new Font("Segoe UI", Font.BOLD, 12)
@@ -101,7 +102,7 @@ public class FrmReserva extends javax.swing.JFrame {
 
         btnRegistrar = new JButton("Confirmar Reserva (Commit)");
         btnRegistrar.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        btnRegistrar.setBackground(new Color(24, 43, 73)); // Azul corporativo
+        btnRegistrar.setBackground(new Color(24, 43, 73)); 
         btnRegistrar.setForeground(Color.BLACK);
 
         panelBotones.add(btnLimpiar);
@@ -131,12 +132,45 @@ public class FrmReserva extends javax.swing.JFrame {
                 limpiarCampos();
             }
         });
+
+        // Cargas automáticas iniciales de la BD
+        cargarDatosTabla();
+        cargarHabitacionesDisponibles();
+    }
+
+    private void cargarDatosTabla() {
+        modeloTabla.setRowCount(0);
+        ReservaControlador controlador = new ReservaControlador();
+        java.util.List<Object[]> filas = controlador.obtenerListaReservas();
+        for (Object[] fila : filas) {
+            modeloTabla.addRow(fila);
+        }
+    }
+
+    // AGREGADO: Consulta dinámicamente los cuartos libres en MySQL
+    private void cargarHabitacionesDisponibles() {
+        cboHabitacion.removeAllItems();
+        com.mycompany.sistemagestionhotelera.controlador.HabitacionControlador ctrlHab = 
+            new com.mycompany.sistemagestionhotelera.controlador.HabitacionControlador();
+        
+        java.util.List<Integer> disponibles = ctrlHab.obtenerHabitacionesDisponibles();
+        for (Integer id : disponibles) {
+            cboHabitacion.addItem(id);
+        }
     }
 
     private void ejecutarReserva() {
         try {
+            // Protección: Validar que existan cuartos libres seleccionados
+            if (cboHabitacion.getSelectedItem() == null) {
+                JOptionPane.showMessageDialog(this, 
+                        "No se puede procesar la reserva porque no hay habitaciones disponibles en este momento.", 
+                        "Alerta de Ocupación", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
             int idHuesped = Integer.parseInt(txtIdHuesped.getText().trim());
-            int idHabitacion = Integer.parseInt(txtIdHabitacion.getText().trim());
+            int idHabitacion = (Integer) cboHabitacion.getSelectedItem(); 
             String ingreso = txtFechaIngreso.getText().trim();
             String salida = txtFechaSalida.getText().trim();
             double costo = Double.parseDouble(txtCostoTotal.getText().trim());
@@ -150,7 +184,9 @@ public class FrmReserva extends javax.swing.JFrame {
                         "¡Transacción Exitosa!\nLa reserva se guardó y la habitación pasó a 'Ocupada' (Commit aplicado).", 
                         "Commit Confirmado", JOptionPane.INFORMATION_MESSAGE);
 
-                modeloTabla.addRow(new Object[]{"AUTO", idHuesped, idHabitacion, ingreso, salida, "S/. " + costo, canal});
+                // Refresca los componentes en tiempo real con la BD
+                cargarDatosTabla();
+                cargarHabitacionesDisponibles();
                 limpiarCampos();
             } else {
                 JOptionPane.showMessageDialog(this, 
@@ -160,18 +196,20 @@ public class FrmReserva extends javax.swing.JFrame {
 
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, 
-                    "Por favor, verifique los datos ingresados.\nLos campos de ID y Costo deben ser numéricos.", 
+                    "Por favor, verifique los datos ingresados.\nEl campo ID Huésped y Costo deben ser numéricos.", 
                     "Error de Validación", JOptionPane.WARNING_MESSAGE);
         }
     }
 
     private void limpiarCampos() {
         txtIdHuesped.setText("");
-        txtIdHabitacion.setText("");
         txtFechaIngreso.setText("");
         txtFechaSalida.setText("");
         txtCostoTotal.setText("");
         cboCanal.setSelectedIndex(0);
+        if (cboHabitacion.getItemCount() > 0) {
+            cboHabitacion.setSelectedIndex(0);
+        }
         txtIdHuesped.requestFocus();
     }
 

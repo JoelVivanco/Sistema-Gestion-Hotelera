@@ -1,29 +1,54 @@
 package com.mycompany.sistemagestionhotelera.dao;
 
-import com.mycompany.sistemagestionhotelera.database.ConexionDB;
-import com.mycompany.sistemagestionhotelera.modelo.Huesped;
-import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.CallableStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import com.mycompany.sistemagestionhotelera.database.ConexionDB;
 
 public class HuespedDAO {
 
-    public boolean registrarHuesped(Huesped huesped) {
-        String sql = "{CALL sp_registrar_huesped(?, ?, ?, ?, ?)}";
-        Connection cn = ConexionDB.getInstancia().getConexion();
-        
-        try (CallableStatement cstmt = cn.prepareCall(sql)) {
-            cstmt.setString(1, huesped.getNombreCompleto());
-            cstmt.setString(2, huesped.getDocumentoIdentidad());
-            cstmt.setString(3, huesped.getTelefono());
-            cstmt.setString(4, huesped.getEmail());
-            cstmt.setString(5, huesped.getTipoCliente());
+    public boolean registrarHuesped(String nombre, String documento, String telefono, String email, String tipo) {
+        String sql = "{call sp_registrar_huesped(?,?,?,?,?)}";
+        Connection con = ConexionDB.getInstancia().getConexion();
+        try (CallableStatement cs = con.prepareCall(sql)) {
             
-            int filasAfectadas = cstmt.executeUpdate();
-            return filasAfectadas > 0;
+            cs.setString(1, nombre);
+            cs.setString(2, documento);
+            cs.setString(3, telefono);
+            cs.setString(4, email);
+            cs.setString(5, tipo);
+            
+            return cs.executeUpdate() > 0;
         } catch (SQLException e) {
             System.out.println("Error en HuespedDAO: " + e.getMessage());
             return false;
         }
+    }
+
+    public List<Object[]> listarHuespedes() {
+        List<Object[]> lista = new ArrayList<>();
+        String sql = "{call sp_listar_huespedes()}";
+        Connection con = ConexionDB.getInstancia().getConexion();
+        try (CallableStatement cs = con.prepareCall(sql);
+            ResultSet rs = cs.executeQuery()) {
+            
+            while (rs.next()) {
+                Object[] fila = new Object[]{
+                    rs.getInt("id_huesped"),
+                    rs.getString("nombre_completo"),
+                    rs.getString("documento_identidad"),
+                    rs.getString("telefono"),
+                    rs.getString("email"),
+                    rs.getString("tipo_cliente")
+                };
+                lista.add(fila);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error al listar huéspedes: " + ex.getMessage());
+        }
+        return lista;
     }
 }

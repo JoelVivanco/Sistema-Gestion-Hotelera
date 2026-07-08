@@ -1,52 +1,75 @@
 package com.mycompany.sistemagestionhotelera.dao;
 
-import com.mycompany.sistemagestionhotelera.database.ConexionDB;
-import com.mycompany.sistemagestionhotelera.modelo.Reserva;
-import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.CallableStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import com.mycompany.sistemagestionhotelera.database.ConexionDB;
 
 public class ReservaDAO {
 
-    public boolean registrarReserva(Reserva reserva) {
-        String sql = "{CALL sp_registrar_reserva(?, ?, ?, ?, ?, ?)}";
-        Connection cn = ConexionDB.getInstancia().getConexion();
-        
+    public boolean registrarReserva(int idHuesped, int idHabitacion, String ingreso, String salida, double costo, String canal) {
+        Connection con = null;
+        String sql = "{call sp_registrar_reserva(?,?,?,?,?,?)}";
         try {
-            cn.setAutoCommit(false);
-            
-            try (CallableStatement cstmt = cn.prepareCall(sql)) {
-                cstmt.setInt(1, reserva.getIdHuesped());
-                cstmt.setInt(2, reserva.getIdHabitacion());
-                cstmt.setString(3, reserva.getFechaIngreso());
-                cstmt.setString(4, reserva.getFechaSalida());
-                cstmt.setDouble(5, reserva.getCostoTotal());
-                cstmt.setString(6, reserva.getCanalReserva());
+            con = ConexionDB.getInstancia().getConexion();
+            con.setAutoCommit(false); // Inicia la transacción explícita
+
+            try (CallableStatement cs = con.prepareCall(sql)) {
+                cs.setInt(1, idHuesped);
+                cs.setInt(2, idHabitacion);
+                cs.setString(3, ingreso);
+                cs.setString(4, salida);
+                cs.setDouble(5, costo);
+                cs.setString(6, canal);
                 
-                int filasAfectadas = cstmt.executeUpdate();
-                
-                if (filasAfectadas > 0) {
-                    // 2. SI TODO SALIÓ BIEN: Confirmamos los cambios en MySQL de forma permanente
-                    cn.commit();
-                    return true;
-                } else {
-                    // Si no afecto filas, forzamos un rollback por seguridad
-                    cn.rollback();
-                    return false;
-                }
-            } catch (SQLException e) {
-                // 3. SI HUBO ERROR EN EL PROCESO: Deshacemos todo lo que se haya intentado hacer
-                cn.rollback();
-                System.out.println("Error en el Query de Reserva, se aplicó Rollback: " + e.getMessage());
-                return false;
-            } finally {
-                // Siempre regresamos la conexión a su estado normal
-                cn.setAutoCommit(true);
+                cs.executeUpdate();
             }
-            
-        } catch (SQLException ex) {
-            System.out.println("Error de transacción en ReservaDAO: " + ex.getMessage());
+
+            con.commit(); // Si todo está bien, confirma la transacción
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Error en transacción de Reserva: " + e.getMessage());
+            if (con != null) {
+                try {
+                    con.rollback(); // Si falla, ejecuta el Rollback
+                    System.out.println("Rollback ejecutado con éxito.");
+                } catch (SQLException ex) {
+                    System.out.println("Error al ejecutar Rollback: " + ex.getMessage());
+                }
+            }
             return false;
+        } finally {
+            if (con != null) {
+                try { con.setAutoCommit(true); } catch (SQLException e) {}
+            }
         }
+    }
+
+    public List<Object[]> listarReservas() {
+        List<Object[]> lista = new ArrayList<>();
+        String sql = "{call sp_listar_reservas()}";
+        Connection con = ConexionDB.getInstancia().getConexion();
+        try (CallableStatement cs = con.prepareCall(sql);
+             ResultSet rs = cs.executeQuery()) {
+            
+            while (rs.next()) {
+                Object[] fila = new Object[]{
+                    rs.getInt("id_reserva"),
+                    rs.getInt("id_huesped"),
+                    rs.getInt("id_habitacion"),
+                    rs.getString("fecha_ingreso"),
+                    rs.getString("fecha_salida"),
+                    "S/. " + rs.getDouble("costo_total"),
+                    rs.getString("canal_reserva")
+                };
+                lista.add(fila);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error al listar reservas: " + ex.getMessage());
+        }
+        return lista;
     }
 }

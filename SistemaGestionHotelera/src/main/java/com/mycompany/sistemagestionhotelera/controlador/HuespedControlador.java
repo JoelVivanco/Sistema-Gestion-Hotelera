@@ -1,21 +1,37 @@
 package com.mycompany.sistemagestionhotelera.controlador;
 
 import com.mycompany.sistemagestionhotelera.dao.HuespedDAO;
-import com.mycompany.sistemagestionhotelera.modelo.Huesped;
+import java.util.List;
 
 public class HuespedControlador {
-    private HuespedDAO huespedDAO;
+    private HuespedDAO huespedDao;
 
     public HuespedControlador() {
-        this.huespedDAO = new HuespedDAO();
+        this.huespedDao = new HuespedDAO();
     }
 
     public boolean registrarHuesped(String nombre, String documento, String telefono, String email, String tipo) {
-        // Validación de campos vacios
-        if (nombre.trim().isEmpty() || documento.trim().isEmpty()) {
-            return false;
-        }
-        Huesped nuevo = new Huesped(nombre, documento, telefono, email, tipo);
-        return huespedDAO.registrarHuesped(nuevo);
+        // 1. Aplicación del Patrón GOF Factory: Delegamos la creación del objeto
+        com.mycompany.sistemagestionhotelera.modelo.Huesped nuevoHuesped = 
+            com.mycompany.sistemagestionhotelera.modelo.HuespedFactory.crearHuesped(tipo, nombre, documento, telefono, email);
+        
+        // Log de Auditoría en consola para demostrar el uso del patrón en la sustentación
+        System.out.println("=== PATRON FACTORY DETECTADO ===");
+        System.out.println("Instanciado objeto tipo: " + nuevoHuesped.getClass().getSimpleName());
+        System.out.println("Regra de Negocio Activa: " + nuevoHuesped.obtenerBeneficio());
+        System.out.println("=================================");
+
+        // 2. Envío de los datos validados a la capa DAO para persistencia en MySQL
+        return huespedDao.registrarHuesped(
+            nuevoHuesped.getNombreCompleto(), 
+            nuevoHuesped.getDocumentoIdentidad(), 
+            nuevoHuesped.getTelefono(), 
+            nuevoHuesped.getEmail(), 
+            nuevoHuesped.getTipoCliente()
+        );
+    }
+
+    public List<Object[]> obtenerListaHuespedes() {
+        return huespedDao.listarHuespedes();
     }
 }

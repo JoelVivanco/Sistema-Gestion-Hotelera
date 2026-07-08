@@ -1,21 +1,20 @@
 package com.mycompany.sistemagestionhotelera.controlador;
 
 import com.mycompany.sistemagestionhotelera.dao.ReservaDAO;
-import com.mycompany.sistemagestionhotelera.modelo.Reserva;
+import java.util.List;
 
 public class ReservaControlador {
-    private ReservaDAO reservaDAO;
+    private ReservaDAO reservaDao;
 
     public ReservaControlador() {
-        this.reservaDAO = new ReservaDAO();
+        this.reservaDao = new ReservaDAO();
     }
 
     public boolean registrarReserva(int idHuesped, int idHabitacion, String ingreso, String salida, double costo, String canal) {
-        // validacion basica de consistencia monetaria y de fechas
-        if (idHuesped <= 0 || idHabitacion <= 0 || costo <= 0) {
-            return false;
-        }
-        Reserva nuevaReserva = new Reserva(idHuesped, idHabitacion, ingreso, salida, costo, canal);
-        return reservaDAO.registrarReserva(nuevaReserva);
+        return reservaDao.registrarReserva(idHuesped, idHabitacion, ingreso, salida, costo, canal);
+    }
+
+    public List<Object[]> obtenerListaReservas() {
+        return reservaDao.listarReservas();
     }
 }
