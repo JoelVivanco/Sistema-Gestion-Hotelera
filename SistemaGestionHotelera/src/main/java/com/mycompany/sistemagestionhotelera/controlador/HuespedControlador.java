@@ -34,4 +34,15 @@ public class HuespedControlador {
     public List<Object[]> obtenerListaHuespedes() {
         return huespedDao.listarHuespedes();
     }
+    public boolean modificarHuesped(int id, String nombre, String documento, String telefono, String email, String tipo) {
+        // Aplicamos la fábrica para validar el tipo modificado
+        com.mycompany.sistemagestionhotelera.modelo.Huesped h = 
+            com.mycompany.sistemagestionhotelera.modelo.HuespedFactory.crearHuesped(tipo, nombre, documento, telefono, email);
+            
+        return huespedDao.modificarHuesped(id, h.getNombreCompleto(), h.getDocumentoIdentidad(), h.getTelefono(), h.getEmail(), h.getTipoCliente());
+    }
+
+    public boolean eliminarHuesped(int id) {
+        return huespedDao.eliminarHuesped(id);
+    }
 }

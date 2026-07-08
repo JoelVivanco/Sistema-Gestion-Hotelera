@@ -72,4 +72,15 @@ public class ReservaDAO {
         }
         return lista;
     }
+    public boolean procesarCheckOut(int idReserva) {
+    String sql = "{call sp_procesar_checkout(?)}";
+    Connection con = ConexionDB.getInstancia().getConexion();
+    try (CallableStatement cs = con.prepareCall(sql)) {
+        cs.setInt(1, idReserva);
+        return cs.executeUpdate() > 0;
+    } catch (SQLException e) {
+        System.out.println("Error en ReservaDAO (Check-Out): " + e.getMessage());
+        return false;
+    }
+}
 }

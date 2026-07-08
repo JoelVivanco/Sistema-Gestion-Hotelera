@@ -51,4 +51,32 @@ public class HuespedDAO {
         }
         return lista;
     }
+    public boolean modificarHuesped(int id, String nombre, String documento, String telefono, String email, String tipo) {
+        String sql = "{call sp_modificar_huesped(?,?,?,?,?,?)}";
+        Connection con = ConexionDB.getInstancia().getConexion();
+        try (CallableStatement cs = con.prepareCall(sql)) {
+            cs.setInt(1, id);
+            cs.setString(2, nombre);
+            cs.setString(3, documento);
+            cs.setString(4, telefono);
+            cs.setString(5, email);
+            cs.setString(6, tipo);
+            return cs.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.out.println("Error en HuespedDAO (modificar): " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean eliminarHuesped(int id) {
+        String sql = "{call sp_eliminar_huesped(?)}";
+        Connection con = ConexionDB.getInstancia().getConexion();
+        try (CallableStatement cs = con.prepareCall(sql)) {
+            cs.setInt(1, id);
+            return cs.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.out.println("Error en HuespedDAO (eliminar): " + e.getMessage());
+            return false;
+        }
+    }
 }

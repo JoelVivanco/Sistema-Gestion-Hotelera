@@ -12,7 +12,7 @@ public class HabitacionControlador {
     }
 
     // Solicita al DAO la lista de habitaciones libres segun su tipo (1=Simple, 2=Doble, etc.)
-    public List<Habitacion> obtenerDisponibles(int idTipo) {
-        return habitacionDAO.listarHabitacionesDisponibles(idTipo);
+    public java.util.List<Integer> obtenerHabitacionesDisponibles() {
+        return habitacionDAO.listarHabitacionesDisponibles();
     }
 }

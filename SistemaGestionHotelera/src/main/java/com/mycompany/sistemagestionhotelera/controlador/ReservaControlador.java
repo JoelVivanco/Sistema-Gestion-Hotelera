@@ -17,4 +17,8 @@ public class ReservaControlador {
     public List<Object[]> obtenerListaReservas() {
         return reservaDao.listarReservas();
     }
+    
+    public boolean procesarCheckOut(int idReserva) {
+    return reservaDao.procesarCheckOut(idReserva);
+}
 }
