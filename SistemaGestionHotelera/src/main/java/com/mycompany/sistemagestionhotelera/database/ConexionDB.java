@@ -16,7 +16,7 @@ public class ConexionDB {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             this.conexion = DriverManager.getConnection(URL, USER, PASSWORD);
-            System.out.println("¡Conexión exitosa a MySQL en el puerto 3307!");
+            System.out.println("conexion exitosa");
         } catch (ClassNotFoundException | SQLException e) {
             System.out.println("Error de conexión: " + e.getMessage());
         }

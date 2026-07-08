@@ -11,7 +11,7 @@ public class HuespedControlador {
     }
 
     public boolean registrarHuesped(String nombre, String documento, String telefono, String email, String tipo) {
-        // Validación de campos vacíos
+        // Validación de campos vacios
         if (nombre.trim().isEmpty() || documento.trim().isEmpty()) {
             return false;
         }
