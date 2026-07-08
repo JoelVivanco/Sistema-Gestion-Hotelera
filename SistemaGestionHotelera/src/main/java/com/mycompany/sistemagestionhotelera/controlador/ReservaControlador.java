@@ -4,6 +4,7 @@ import com.mycompany.sistemagestionhotelera.dao.ReservaDAO;
 import java.util.List;
 
 public class ReservaControlador {
+
     private ReservaDAO reservaDao;
 
     public ReservaControlador() {
@@ -17,8 +18,8 @@ public class ReservaControlador {
     public List<Object[]> obtenerListaReservas() {
         return reservaDao.listarReservas();
     }
-    
+
     public boolean procesarCheckOut(int idReserva) {
-    return reservaDao.procesarCheckOut(idReserva);
-}
+        return reservaDao.procesarCheckOut(idReserva);
+    }
 }

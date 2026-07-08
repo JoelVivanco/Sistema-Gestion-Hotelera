@@ -5,12 +5,13 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConexionDB {
+
     private static ConexionDB instancia;
     private Connection conexion;
 
     private final String URL = "jdbc:mysql://localhost:3307/db_hotel_gestion?useSSL=false&serverTimezone=UTC";
-    private final String USER = "root"; 
-    private final String PASSWORD = ""; 
+    private final String USER = "root";
+    private final String PASSWORD = "";
 
     private ConexionDB() {
         try {

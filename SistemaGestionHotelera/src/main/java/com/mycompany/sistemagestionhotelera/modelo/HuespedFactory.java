@@ -1,11 +1,13 @@
 package com.mycompany.sistemagestionhotelera.modelo;
 
 public class HuespedFactory {
-    
+
     // Método Fábrica que retorna la instancia polimórfica correcta
     public static Huesped crearHuesped(String tipo, String nombre, String documento, String telefono, String email) {
-        if (tipo == null) return null;
-        
+        if (tipo == null) {
+            return null;
+        }
+
         switch (tipo.trim().toLowerCase()) {
             case "frecuente":
                 return new HuespedFrecuente(nombre, documento, telefono, email);

@@ -19,14 +19,14 @@ public class FrmHuesped extends javax.swing.JFrame {
     private JTextField txtEmail;
     private JComboBox<String> cboTipo;
     private JButton btnRegistrar;
-    private JButton btnModificar; // NUEVO
-    private JButton btnEliminar;  // NUEVO
+    private JButton btnModificar;
+    private JButton btnEliminar;
     private JButton btnLimpiar;
 
     // Componentes de la Tabla
     private JTable tblHuespedes;
     private DefaultTableModel modeloTabla;
-    
+
     // Variable de Control Interno
     private int idSeleccionado = -1; // Almacena el ID de la fila clickeada
 
@@ -41,73 +41,86 @@ public class FrmHuesped extends javax.swing.JFrame {
         // --- 1. PANEL SUPERIOR: FORMULARIO DE ENTRADA ---
         JPanel panelFormulario = new JPanel(new GridLayout(3, 4, 15, 10));
         panelFormulario.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(), 
-                " Datos del Huésped ", 
-                TitledBorder.LEFT, 
-                TitledBorder.TOP, 
+                BorderFactory.createEtchedBorder(),
+                " Datos del Huésped ",
+                TitledBorder.LEFT,
+                TitledBorder.TOP,
                 new Font("Segoe UI", Font.BOLD, 12)
         ));
 
         Font fuenteLabel = new Font("Segoe UI", Font.PLAIN, 12);
-        
-        JLabel lblNombre = new JLabel("Nombre Completo:"); lblNombre.setFont(fuenteLabel);
+
+        JLabel lblNombre = new JLabel("Nombre Completo:");
+        lblNombre.setFont(fuenteLabel);
         txtNombre = new JTextField();
-        
-        JLabel lblDoc = new JLabel("Doc. Identidad (DNI/PAS):"); lblDoc.setFont(fuenteLabel);
+
+        JLabel lblDoc = new JLabel("Doc. Identidad (DNI/PAS):");
+        lblDoc.setFont(fuenteLabel);
         txtDocumento = new JTextField();
-        
-        JLabel lblTel = new JLabel("Teléfono:"); lblTel.setFont(fuenteLabel);
+
+        JLabel lblTel = new JLabel("Teléfono:");
+        lblTel.setFont(fuenteLabel);
         txtTelefono = new JTextField();
-        
-        JLabel lblEmail = new JLabel("Correo Electrónico:"); lblEmail.setFont(fuenteLabel);
+
+        JLabel lblEmail = new JLabel("Correo Electrónico:");
+        lblEmail.setFont(fuenteLabel);
         txtEmail = new JTextField();
-        
-        JLabel lblTipo = new JLabel("Tipo de Cliente:"); lblTipo.setFont(fuenteLabel);
+
+        JLabel lblTipo = new JLabel("Tipo de Cliente:");
+        lblTipo.setFont(fuenteLabel);
         String[] tipos = {"Regular", "Frecuente", "Corporativo"};
         cboTipo = new JComboBox<>(tipos);
         cboTipo.setBackground(Color.WHITE);
 
         // Agregar los elementos al Grid del formulario
-        panelFormulario.add(lblNombre);      panelFormulario.add(txtNombre);
-        panelFormulario.add(lblDoc);         panelFormulario.add(txtDocumento);
-        panelFormulario.add(lblTel);         panelFormulario.add(txtTelefono);
-        panelFormulario.add(lblEmail);       panelFormulario.add(txtEmail);
-        panelFormulario.add(lblTipo);        panelFormulario.add(cboTipo);
-        panelFormulario.add(new JLabel("")); panelFormulario.add(new JLabel(""));
+        panelFormulario.add(lblNombre);
+        panelFormulario.add(txtNombre);
+        panelFormulario.add(lblDoc);
+        panelFormulario.add(txtDocumento);
+        panelFormulario.add(lblTel);
+        panelFormulario.add(txtTelefono);
+        panelFormulario.add(lblEmail);
+        panelFormulario.add(txtEmail);
+        panelFormulario.add(lblTipo);
+        panelFormulario.add(cboTipo);
+        panelFormulario.add(new JLabel(""));
+        panelFormulario.add(new JLabel(""));
 
         // --- 2. PANEL CENTRAL: TABLA DE REGISTROS ---
         JPanel panelTabla = new JPanel(new BorderLayout());
         panelTabla.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(), 
-                " Huéspedes Registrados en el Sistema ", 
-                TitledBorder.LEFT, 
-                TitledBorder.TOP, 
+                BorderFactory.createEtchedBorder(),
+                " Huéspedes Registrados en el Sistema ",
+                TitledBorder.LEFT,
+                TitledBorder.TOP,
                 new Font("Segoe UI", Font.BOLD, 12)
         ));
 
         String[] columnas = {"ID", "Nombre Completo", "Documento", "Teléfono", "Correo", "Tipo Cliente"};
         modeloTabla = new DefaultTableModel(columnas, 0) {
             @Override
-            public boolean isCellEditable(int row, int column) { return false; } 
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
         };
-        
+
         tblHuespedes = new JTable(modeloTabla);
-        tblHuespedes.getTableHeader().setReorderingAllowed(false); 
+        tblHuespedes.getTableHeader().setReorderingAllowed(false);
         JScrollPane scrollTabla = new JScrollPane(tblHuespedes);
         panelTabla.add(scrollTabla, BorderLayout.CENTER);
 
         // --- 3. PANEL INFERIOR: BOTONES DE ACCIÓN ---
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
-        
+
         btnLimpiar = new JButton("Limpiar Campos");
         btnLimpiar.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        
+
         // NUEVO: Botón Modificar
         btnModificar = new JButton("Modificar");
         btnModificar.setFont(new Font("Segoe UI", Font.BOLD, 12));
         btnModificar.setBackground(new Color(218, 165, 32)); // Dorado ejecutivo
         btnModificar.setForeground(Color.BLACK);
-        
+
         // NUEVO: Botón Eliminar
         btnEliminar = new JButton("Eliminar");
         btnEliminar.setFont(new Font("Segoe UI", Font.BOLD, 12));
@@ -116,7 +129,7 @@ public class FrmHuesped extends javax.swing.JFrame {
 
         btnRegistrar = new JButton("Guardar Nuevo");
         btnRegistrar.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        btnRegistrar.setBackground(new Color(34, 139, 34)); 
+        btnRegistrar.setBackground(new Color(34, 139, 34));
         btnRegistrar.setForeground(Color.BLACK);
 
         panelBotones.add(btnLimpiar);
@@ -127,11 +140,11 @@ public class FrmHuesped extends javax.swing.JFrame {
         // --- ENSAMBLE FINAL ---
         JPanel contenedorMargen = new JPanel(new BorderLayout(5, 5));
         contenedorMargen.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        
+
         contenedorMargen.add(panelFormulario, BorderLayout.NORTH);
         contenedorMargen.add(panelTabla, BorderLayout.CENTER);
         contenedorMargen.add(panelBotones, BorderLayout.SOUTH);
-        
+
         add(contenedorMargen, BorderLayout.CENTER);
 
         // --- MANEJO DE EVENTOS ---
@@ -183,7 +196,7 @@ public class FrmHuesped extends javax.swing.JFrame {
     }
 
     private void cargarDatosTabla() {
-        modeloTabla.setRowCount(0); 
+        modeloTabla.setRowCount(0);
         HuespedControlador controlador = new HuespedControlador();
         java.util.List<Object[]> filas = controlador.obtenerListaHuespedes();
         for (Object[] fila : filas) {
@@ -241,7 +254,7 @@ public class FrmHuesped extends javax.swing.JFrame {
             return;
         }
         int respuesta = JOptionPane.showConfirmDialog(this, "¿Está seguro de eliminar permanentemente este huésped?", "Confirmar Eliminación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-        
+
         if (respuesta == JOptionPane.YES_OPTION) {
             HuespedControlador controlador = new HuespedControlador();
             boolean exito = controlador.eliminarHuesped(idSeleccionado);
