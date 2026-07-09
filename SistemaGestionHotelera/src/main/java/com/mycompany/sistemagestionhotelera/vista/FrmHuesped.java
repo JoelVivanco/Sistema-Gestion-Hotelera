@@ -36,7 +36,7 @@ public class FrmHuesped extends javax.swing.JFrame {
         setSize(900, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
-        getContentPane().setBackground(new Color(248, 250, 252)); // Fondo claro sutil
+        getContentPane().setBackground(new Color(248, 250, 252));
         setLayout(new BorderLayout(15, 15));
 
         Font fuenteLabel = new Font("Segoe UI", Font.CENTER_BASELINE, 12);
@@ -116,20 +116,20 @@ public class FrmHuesped extends javax.swing.JFrame {
         estiloBoton(btnLimpiar, new Color(226, 232, 240), new Color(71, 85, 105));
 
         btnModificar = new JButton("Modificar");
-        estiloBoton(btnModificar, new Color(71, 85, 105), Color.WHITE); // Gris azulado corporativo
+        estiloBoton(btnModificar, new Color(71, 85, 105), Color.WHITE); 
 
         btnEliminar = new JButton("Eliminar");
-        estiloBoton(btnEliminar, new Color(239, 68, 68), Color.WHITE); // Coral plano moderno
+        estiloBoton(btnEliminar, new Color(239, 68, 68), Color.WHITE); 
 
         btnRegistrar = new JButton("Guardar Nuevo");
-        estiloBoton(btnRegistrar, new Color(30, 41, 59), Color.WHITE); // Azul oscuro ejecutivo
+        estiloBoton(btnRegistrar, new Color(30, 41, 59), Color.WHITE); 
 
         panelBotones.add(btnLimpiar);
         panelBotones.add(btnModificar);
         panelBotones.add(btnEliminar);
         panelBotones.add(btnRegistrar);
 
-        // --- ENSAMBLE FINAL ---
+        // ENSAMBLE FINAL
         JPanel contenedorMargen = new JPanel(new BorderLayout(15, 15));
         contenedorMargen.setBackground(new Color(248, 250, 252));
         contenedorMargen.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
@@ -140,7 +140,7 @@ public class FrmHuesped extends javax.swing.JFrame {
 
         add(contenedorMargen, BorderLayout.CENTER);
 
-        // --- MANEJO DE EVENTOS INTACTO ---
+        // MANEJO DE EVENTOS INTACTO
         btnRegistrar.addActionListener(e -> ejecutarRegistro());
         btnModificar.addActionListener(e -> ejecutarModificacion());
         btnEliminar.addActionListener(e -> ejecutarEliminacion());

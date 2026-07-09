@@ -26,7 +26,6 @@ public class FrmHabitacion extends javax.swing.JFrame {
         Font fuenteLabel = new Font("Segoe UI", Font.CENTER_BASELINE, 12);
         Color colorTextoLabel = new Color(71, 85, 105);
 
-        // panel del formulario limpio sin TitledBorder anticuado
         JPanel panelForm = new JPanel(new GridLayout(4, 2, 10, 20));
         panelForm.setBackground(Color.WHITE);
         panelForm.setBorder(BorderFactory.createCompoundBorder(

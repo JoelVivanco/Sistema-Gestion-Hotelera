@@ -38,7 +38,7 @@ public class FrmReserva extends javax.swing.JFrame {
         Font fuenteLabel = new Font("Segoe UI", Font.CENTER_BASELINE, 12);
         Color colorTextoLabel = new Color(71, 85, 105);
 
-        // --- PANEL SUPERIOR: FORMULARIO ---
+        // FORMULARIO
         JPanel panelFormulario = new JPanel(new GridLayout(4, 4, 15, 15));
         panelFormulario.setBackground(Color.WHITE);
         panelFormulario.setBorder(BorderFactory.createCompoundBorder(
@@ -102,7 +102,7 @@ public class FrmReserva extends javax.swing.JFrame {
         panelFormulario.add(lblCosto);
         panelFormulario.add(txtCostoTotal);
 
-        // --- PANEL CENTRAL: TABLA ---
+        // TABLA 
         JPanel panelTabla = new JPanel(new BorderLayout());
         panelTabla.setBackground(Color.WHITE);
         panelTabla.setBorder(BorderFactory.createCompoundBorder(
@@ -131,7 +131,7 @@ public class FrmReserva extends javax.swing.JFrame {
         JScrollPane scrollTabla = new JScrollPane(tblReservas);
         panelTabla.add(scrollTabla, BorderLayout.CENTER);
 
-        // --- PANEL INFERIOR: ACCIONES (Estilo Botones Flat) ---
+        // ACCIONES
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 12, 0));
         panelBotones.setBackground(new Color(248, 250, 252));
 
@@ -139,10 +139,10 @@ public class FrmReserva extends javax.swing.JFrame {
         estiloBoton(btnLimpiar, new Color(226, 232, 240), new Color(71, 85, 105));
 
         btnCheckOut = new JButton("Procesar Check-Out");
-        estiloBoton(btnCheckOut, new Color(239, 68, 68), Color.WHITE); // Coral plano moderno
+        estiloBoton(btnCheckOut, new Color(239, 68, 68), Color.BLACK); 
 
         btnRegistrar = new JButton("Confirmar Reserva (Commit)");
-        estiloBoton(btnRegistrar, new Color(30, 41, 59), Color.WHITE); // Azul oscuro con texto blanco nítido
+        estiloBoton(btnRegistrar, new Color(30, 41, 59), Color.WHITE); 
 
         panelBotones.add(btnLimpiar);
         panelBotones.add(btnCheckOut);
@@ -158,7 +158,7 @@ public class FrmReserva extends javax.swing.JFrame {
 
         add(contenedorMargen, BorderLayout.CENTER);
 
-        // --- MANEJO DE EVENTOS INTACTO ---
+        //MANEJO DE EVENTOS 
         cboHabitacion.addActionListener(e -> actualizarDetallesHabitacion());
         btnRegistrar.addActionListener(e -> ejecutarReserva());
         btnCheckOut.addActionListener(e -> ejecutarCheckOut());
@@ -186,7 +186,6 @@ public class FrmReserva extends javax.swing.JFrame {
         btn.setBorder(BorderFactory.createEmptyBorder(10, 18, 10, 18));
     }
 
-    // [Se mantienen los métodos actualizarDetallesHabitacion, cargarDatosTabla, cargarHabitacionesDisponibles, ejecutarReserva, ejecutarCheckOut, limpiarCampos, obtenerEmailHuespedDesdeDB y obtenerIdTipoDesdeDB exactamente igual como los tenías]
     private void actualizarDetallesHabitacion() {
         if (cboHabitacion.getSelectedItem() == null) {
             txtTipoHabitacion.setText("");
@@ -283,7 +282,7 @@ public class FrmReserva extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Seleccione una reserva de la tabla para procesar el Check-Out.", "Atención", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        int opc = JOptionPane.showConfirmDialog(this, "¿Proceder con el cierre de estadía y liberación de habitación?", "Check-Out de Huésped", JOptionPane.YES_NO_OPTION);
+        int opc = JOptionPane.showConfirmDialog(this, "Proceder con el cierre de estadía y liberación de habitación?", "Check-Out de Huesped", JOptionPane.YES_NO_OPTION);
         if (opc == JOptionPane.YES_OPTION) {
             ReservaControlador controlador = new ReservaControlador();
             boolean exito = controlador.procesarCheckOut(idReservaSeleccionada);
