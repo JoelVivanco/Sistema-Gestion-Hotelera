@@ -28,109 +28,101 @@ public class FrmHuesped extends javax.swing.JFrame {
     private DefaultTableModel modeloTabla;
 
     // Variable de Control Interno
-    private int idSeleccionado = -1; // Almacena el ID de la fila clickeada
+    private int idSeleccionado = -1;
 
     public FrmHuesped() {
-        // Configuración de la ventana estilo ERP
+        // Configuracion de la ventana estilo ERP Moderno
         setTitle("Módulo de Administración: Gestión de Huéspedes");
-        setSize(850, 580);
+        setSize(900, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
-        setLayout(new BorderLayout(10, 10));
+        getContentPane().setBackground(new Color(248, 250, 252)); // Fondo claro sutil
+        setLayout(new BorderLayout(15, 15));
+
+        Font fuenteLabel = new Font("Segoe UI", Font.CENTER_BASELINE, 12);
+        Color colorTextoLabel = new Color(71, 85, 105);
 
         // --- 1. PANEL SUPERIOR: FORMULARIO DE ENTRADA ---
-        JPanel panelFormulario = new JPanel(new GridLayout(3, 4, 15, 10));
-        panelFormulario.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
-                " Datos del Huésped ",
-                TitledBorder.LEFT,
-                TitledBorder.TOP,
-                new Font("Segoe UI", Font.BOLD, 12)
+        JPanel panelFormulario = new JPanel(new GridLayout(3, 4, 15, 15));
+        panelFormulario.setBackground(Color.WHITE);
+        panelFormulario.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(226, 232, 240), 1, true),
+                BorderFactory.createEmptyBorder(20, 20, 20, 20)
         ));
 
-        Font fuenteLabel = new Font("Segoe UI", Font.PLAIN, 12);
-
         JLabel lblNombre = new JLabel("Nombre Completo:");
-        lblNombre.setFont(fuenteLabel);
+        lblNombre.setFont(fuenteLabel); lblNombre.setForeground(colorTextoLabel);
         txtNombre = new JTextField();
 
         JLabel lblDoc = new JLabel("Doc. Identidad (DNI/PAS):");
-        lblDoc.setFont(fuenteLabel);
+        lblDoc.setFont(fuenteLabel); lblDoc.setForeground(colorTextoLabel);
         txtDocumento = new JTextField();
 
         JLabel lblTel = new JLabel("Teléfono:");
-        lblTel.setFont(fuenteLabel);
+        lblTel.setFont(fuenteLabel); lblTel.setForeground(colorTextoLabel);
         txtTelefono = new JTextField();
 
         JLabel lblEmail = new JLabel("Correo Electrónico:");
-        lblEmail.setFont(fuenteLabel);
+        lblEmail.setFont(fuenteLabel); lblEmail.setForeground(colorTextoLabel);
         txtEmail = new JTextField();
 
         JLabel lblTipo = new JLabel("Tipo de Cliente:");
-        lblTipo.setFont(fuenteLabel);
+        lblTipo.setFont(fuenteLabel); lblTipo.setForeground(colorTextoLabel);
         String[] tipos = {"Regular", "Frecuente", "Corporativo"};
         cboTipo = new JComboBox<>(tipos);
         cboTipo.setBackground(Color.WHITE);
 
         // Agregar los elementos al Grid del formulario
-        panelFormulario.add(lblNombre);
-        panelFormulario.add(txtNombre);
-        panelFormulario.add(lblDoc);
-        panelFormulario.add(txtDocumento);
-        panelFormulario.add(lblTel);
-        panelFormulario.add(txtTelefono);
-        panelFormulario.add(lblEmail);
-        panelFormulario.add(txtEmail);
-        panelFormulario.add(lblTipo);
-        panelFormulario.add(cboTipo);
+        panelFormulario.add(lblNombre);   panelFormulario.add(txtNombre);
+        panelFormulario.add(lblDoc);      panelFormulario.add(txtDocumento);
+        panelFormulario.add(lblTel);      panelFormulario.add(txtTelefono);
+        panelFormulario.add(lblEmail);    panelFormulario.add(txtEmail);
+        panelFormulario.add(lblTipo);     panelFormulario.add(cboTipo);
         panelFormulario.add(new JLabel(""));
         panelFormulario.add(new JLabel(""));
 
         // --- 2. PANEL CENTRAL: TABLA DE REGISTROS ---
         JPanel panelTabla = new JPanel(new BorderLayout());
-        panelTabla.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createEtchedBorder(),
-                " Huéspedes Registrados en el Sistema ",
-                TitledBorder.LEFT,
-                TitledBorder.TOP,
-                new Font("Segoe UI", Font.BOLD, 12)
+        panelTabla.setBackground(Color.WHITE);
+        panelTabla.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(226, 232, 240), 1, true),
+                BorderFactory.createEmptyBorder(15, 15, 15, 15)
         ));
+
+        JLabel lblTablaTitulo = new JLabel("Huéspedes Registrados en el Sistema");
+        lblTablaTitulo.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        lblTablaTitulo.setForeground(new Color(51, 65, 85));
+        lblTablaTitulo.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+        panelTabla.add(lblTablaTitulo, BorderLayout.NORTH);
 
         String[] columnas = {"ID", "Nombre Completo", "Documento", "Teléfono", "Correo", "Tipo Cliente"};
         modeloTabla = new DefaultTableModel(columnas, 0) {
             @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
+            public boolean isCellEditable(int row, int column) { return false; }
         };
 
         tblHuespedes = new JTable(modeloTabla);
+        tblHuespedes.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
         tblHuespedes.getTableHeader().setReorderingAllowed(false);
+        tblHuespedes.setRowHeight(22);
         JScrollPane scrollTabla = new JScrollPane(tblHuespedes);
         panelTabla.add(scrollTabla, BorderLayout.CENTER);
 
-        // --- 3. PANEL INFERIOR: BOTONES DE ACCIÓN ---
-        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        // --- 3. PANEL INFERIOR: BOTONES DE ACCIÓN (Estilo Flat UI) ---
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 12, 0));
+        panelBotones.setBackground(new Color(248, 250, 252));
 
         btnLimpiar = new JButton("Limpiar Campos");
-        btnLimpiar.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        estiloBoton(btnLimpiar, new Color(226, 232, 240), new Color(71, 85, 105));
 
-        // NUEVO: Botón Modificar
         btnModificar = new JButton("Modificar");
-        btnModificar.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        btnModificar.setBackground(new Color(218, 165, 32)); // Dorado ejecutivo
-        btnModificar.setForeground(Color.BLACK);
+        estiloBoton(btnModificar, new Color(71, 85, 105), Color.WHITE); // Gris azulado corporativo
 
-        // NUEVO: Botón Eliminar
         btnEliminar = new JButton("Eliminar");
-        btnEliminar.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        btnEliminar.setBackground(new Color(178, 34, 34)); // Rojo oscuro corporativo
-        btnEliminar.setForeground(Color.BLACK);
+        estiloBoton(btnEliminar, new Color(239, 68, 68), Color.WHITE); // Coral plano moderno
 
         btnRegistrar = new JButton("Guardar Nuevo");
-        btnRegistrar.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        btnRegistrar.setBackground(new Color(34, 139, 34));
-        btnRegistrar.setForeground(Color.BLACK);
+        estiloBoton(btnRegistrar, new Color(30, 41, 59), Color.WHITE); // Azul oscuro ejecutivo
 
         panelBotones.add(btnLimpiar);
         panelBotones.add(btnModificar);
@@ -138,8 +130,9 @@ public class FrmHuesped extends javax.swing.JFrame {
         panelBotones.add(btnRegistrar);
 
         // --- ENSAMBLE FINAL ---
-        JPanel contenedorMargen = new JPanel(new BorderLayout(5, 5));
-        contenedorMargen.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        JPanel contenedorMargen = new JPanel(new BorderLayout(15, 15));
+        contenedorMargen.setBackground(new Color(248, 250, 252));
+        contenedorMargen.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         contenedorMargen.add(panelFormulario, BorderLayout.NORTH);
         contenedorMargen.add(panelTabla, BorderLayout.CENTER);
@@ -147,36 +140,12 @@ public class FrmHuesped extends javax.swing.JFrame {
 
         add(contenedorMargen, BorderLayout.CENTER);
 
-        // --- MANEJO DE EVENTOS ---
-        btnRegistrar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ejecutarRegistro();
-            }
-        });
+        // --- MANEJO DE EVENTOS INTACTO ---
+        btnRegistrar.addActionListener(e -> ejecutarRegistro());
+        btnModificar.addActionListener(e -> ejecutarModificacion());
+        btnEliminar.addActionListener(e -> ejecutarEliminacion());
+        btnLimpiar.addActionListener(e -> limpiarCampos());
 
-        btnModificar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ejecutarModificacion();
-            }
-        });
-
-        btnEliminar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ejecutarEliminacion();
-            }
-        });
-
-        btnLimpiar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                limpiarCampos();
-            }
-        });
-
-        // NUEVO: Evento al hacer clic en una fila de la tabla
         tblHuespedes.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -193,6 +162,15 @@ public class FrmHuesped extends javax.swing.JFrame {
         });
 
         cargarDatosTabla();
+    }
+
+    private void estiloBoton(JButton btn, Color fondo, Color texto) {
+        btn.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        btn.setBackground(fondo);
+        btn.setForeground(texto);
+        btn.setFocusPainted(false);
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btn.setBorder(BorderFactory.createEmptyBorder(10, 18, 10, 18));
     }
 
     private void cargarDatosTabla() {
@@ -223,7 +201,6 @@ public class FrmHuesped extends javax.swing.JFrame {
         }
     }
 
-    // NUEVO: Método para ejecutar modificación
     private void ejecutarModificacion() {
         if (idSeleccionado == -1) {
             JOptionPane.showMessageDialog(this, "Por favor, seleccione un huésped de la tabla para modificar.", "Atención", JOptionPane.WARNING_MESSAGE);
@@ -247,7 +224,6 @@ public class FrmHuesped extends javax.swing.JFrame {
         }
     }
 
-    // NUEVO: Método para ejecutar eliminación
     private void ejecutarEliminacion() {
         if (idSeleccionado == -1) {
             JOptionPane.showMessageDialog(this, "Por favor, seleccione un huésped de la tabla para eliminar.", "Atención", JOptionPane.WARNING_MESSAGE);
@@ -275,7 +251,7 @@ public class FrmHuesped extends javax.swing.JFrame {
         txtTelefono.setText("");
         txtEmail.setText("");
         cboTipo.setSelectedIndex(0);
-        idSeleccionado = -1; // Resetea la selección
+        idSeleccionado = -1;
         txtNombre.requestFocus();
     }
 
@@ -285,10 +261,8 @@ public class FrmHuesped extends javax.swing.JFrame {
         } catch (Exception ex) {
             java.util.logging.Logger.getLogger(FrmHuesped.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FrmHuesped().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new FrmHuesped().setVisible(true);
         });
     }
 }
