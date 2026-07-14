@@ -4,9 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import sistema.controlador.HabitacionControlador;
+import sistema.controlador.HotelFacade;
 
 public class FrmHabitacion extends javax.swing.JFrame {
+
+    private final HotelFacade facade = new HotelFacade();
 
     private JTextField txtIdHabitacion;
     private JTextField txtNumero;
@@ -102,8 +104,7 @@ public class FrmHabitacion extends javax.swing.JFrame {
                 return;
             }
 
-            HabitacionControlador controlador = new HabitacionControlador();
-            boolean exito = controlador.guardarNuevaHabitacion(id, numero, idTipo, estado);
+            boolean exito = facade.guardarNuevaHabitacion(id, numero, idTipo, estado);
 
             if (exito) {
                 JOptionPane.showMessageDialog(this, "¡Habitación " + numero + " creada con éxito!", "Éxito", JOptionPane.INFORMATION_MESSAGE);

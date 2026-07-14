@@ -1,10 +1,6 @@
-package sistema.database;
-
-
+package sistema;
 
 import sistema.formularios.FrmLogin;
-import javax.swing.UIManager;
-import sistema.formularios.FrmMenu;
 
 public class Main {
 

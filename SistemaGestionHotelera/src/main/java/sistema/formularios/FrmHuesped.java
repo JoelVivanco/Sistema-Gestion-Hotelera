@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import sistema.controlador.HotelFacade;
-import sistema.controlador.HuespedControlador;
 
 public class FrmHuesped extends javax.swing.JFrame {
 
@@ -192,7 +191,6 @@ public class FrmHuesped extends javax.swing.JFrame {
         String email = txtEmail.getText().trim();
         String tipo = cboTipo.getSelectedItem().toString();
 
-        HuespedControlador controlador = new HuespedControlador();
         boolean exito = facade.registrarHuesped(nombre, documento, telefono, email, tipo);
 
         if (exito) {
@@ -215,8 +213,7 @@ public class FrmHuesped extends javax.swing.JFrame {
         String email = txtEmail.getText().trim();
         String tipo = cboTipo.getSelectedItem().toString();
 
-        HuespedControlador controlador = new HuespedControlador();
-        boolean exito = controlador.modificarHuesped(idSeleccionado, nombre, documento, telefono, email, tipo);
+        boolean exito = facade.modificarHuesped(idSeleccionado, nombre, documento, telefono, email, tipo);
 
         if (exito) {
             JOptionPane.showMessageDialog(this, "Datos actualizados correctamente en MySQL.", "Modificación Exitosa", JOptionPane.INFORMATION_MESSAGE);
@@ -235,8 +232,7 @@ public class FrmHuesped extends javax.swing.JFrame {
         int respuesta = JOptionPane.showConfirmDialog(this, "¿Está seguro de eliminar permanentemente este huésped?", "Confirmar Eliminación", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
         if (respuesta == JOptionPane.YES_OPTION) {
-            HuespedControlador controlador = new HuespedControlador();
-            boolean exito = controlador.eliminarHuesped(idSeleccionado);
+            boolean exito = facade.eliminarHuesped(idSeleccionado);
 
             if (exito) {
                 JOptionPane.showMessageDialog(this, "Registro removido de la base de datos.", "Eliminación Exitosa", JOptionPane.INFORMATION_MESSAGE);
